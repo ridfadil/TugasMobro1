@@ -1,8 +1,11 @@
 package praktikum.latihan.com.tugasmobpro;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -59,6 +62,9 @@ public class HargaActivity extends AppCompatActivity {
     Button cekHarga;
     @BindView(R.id.linear)
     LinearLayout linear;
+    @BindView(R.id.cd_total_harga)
+    CardView cdTotalHarga;
+    int i = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +100,7 @@ public class HargaActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.sw_chicken_katsu, R.id.sw_thailis, R.id.sw_bakpao, R.id.sw_kweiaw, R.id.sw_jus, R.id.sw_kopi_yunan, R.id.sw_teh_krisan, R.id.sw_jiuniang, R.id.btn_pesan,R.id.cek_harga})
+    @OnClick({R.id.sw_chicken_katsu, R.id.sw_thailis, R.id.sw_bakpao, R.id.sw_kweiaw, R.id.sw_jus, R.id.sw_kopi_yunan, R.id.sw_teh_krisan, R.id.sw_jiuniang, R.id.btn_pesan, R.id.cek_harga})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.sw_chicken_katsu:
@@ -170,24 +176,40 @@ public class HargaActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.btn_pesan:
-                Toast.makeText(getApplicationContext(),"Terimakasih Sudah Memesan",Toast.LENGTH_LONG).show();
-                Intent i = new Intent(HargaActivity.this,MainActivity.class);
-                startActivity(i);
+
+                AlertDialog alertDialog = new AlertDialog.Builder(
+                        HargaActivity.this).create();
+                alertDialog.setTitle("Info Pesanan");
+                alertDialog.setIcon(R.drawable.imageresto);
+                alertDialog.setMessage("Terimakasih Sudah Melakukan Pemesanan");
+                alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(), "Pesanan Sedang Di Proses", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(HargaActivity.this, MainActivity.class);
+                        startActivity(i);
+                    }
+                });
+                alertDialog.show();
                 break;
             case R.id.cek_harga:
-                linear.setVisibility(View.VISIBLE);
-                chikenKatsu = Integer.parseInt(txtChickenKatsu.getText().toString());
-                thailis = Integer.parseInt(txtThailis.getText().toString());
-                kwetiaw = Integer.parseInt(txtKwwetiaw.getText().toString());
-                jus = Integer.parseInt(txtJus.getText().toString());
-                kopiYunan = Integer.parseInt(txtKopiYunan.getText().toString());
-                tehKrisan = Integer.parseInt(txtTehKrisa.getText().toString());
-                jiuniang = Integer.parseInt(txtJuinang.getText().toString());
-                bakpao = Integer.parseInt(txtBakpao.getText().toString());
-                //setClicked(chikenKatsu,thailis,bakpao,kwetiaw,jus,kopiYunan,tehKrisan,jiuniang);
-                int jumlah = 0;
-                jumlah = (chikenKatsu * hargaChikenKatsu) + (thailis * hargaThailis) + (bakpao * hargaBakpao) + (kwetiaw * hargaKwetiaw) + (jus * hargaJus) + (kopiYunan * hargaKopiYunan) + (tehKrisan * hargaTehKrisa) + (jiuniang * hargaJiuniang);
-                jmlTotal.setText(String.valueOf(jumlah));
+                if (i % 2 == 0) {
+                    cdTotalHarga.setVisibility(View.VISIBLE);
+                    chikenKatsu = Integer.parseInt(txtChickenKatsu.getText().toString());
+                    thailis = Integer.parseInt(txtThailis.getText().toString());
+                    kwetiaw = Integer.parseInt(txtKwwetiaw.getText().toString());
+                    jus = Integer.parseInt(txtJus.getText().toString());
+                    kopiYunan = Integer.parseInt(txtKopiYunan.getText().toString());
+                    tehKrisan = Integer.parseInt(txtTehKrisa.getText().toString());
+                    jiuniang = Integer.parseInt(txtJuinang.getText().toString());
+                    bakpao = Integer.parseInt(txtBakpao.getText().toString());
+                    //setClicked(chikenKatsu,thailis,bakpao,kwetiaw,jus,kopiYunan,tehKrisan,jiuniang);
+                    int jumlah = 0;
+                    jumlah = (chikenKatsu * hargaChikenKatsu) + (thailis * hargaThailis) + (bakpao * hargaBakpao) + (kwetiaw * hargaKwetiaw) + (jus * hargaJus) + (kopiYunan * hargaKopiYunan) + (tehKrisan * hargaTehKrisa) + (jiuniang * hargaJiuniang);
+                    jmlTotal.setText(String.valueOf(jumlah));
+                } else {
+                    cdTotalHarga.setVisibility(View.GONE);
+                }
+                i++;
                 break;
         }
     }
